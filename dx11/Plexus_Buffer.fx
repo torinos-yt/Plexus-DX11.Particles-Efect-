@@ -22,8 +22,8 @@ cbuffer cbPerObj : register( b1 )
 struct lineData{
 	float3 Pos1;
 	float3 Pos2;
-	float4 p1Color;
-	float4 p2Color;
+	float4 Col1;
+	float4 Col2;
 	float alpha;
 };
 
@@ -60,8 +60,8 @@ void geomline (point vs2gs input[1], inout LineStream<gsout> outStream){
 	gsout output0, output1;
 	output0.pos = mul(float4(inputBuffer[input[0].vid].Pos1, 1), tWVP);
 	output1.pos = mul(float4(inputBuffer[input[0].vid].Pos2, 1), tWVP);
-	output0.col = inputBuffer[input[0].vid].p1Color;
-	output1.col = inputBuffer[input[0].vid].p2Color;
+	output0.col = inputBuffer[input[0].vid].Col1;
+	output1.col = inputBuffer[input[0].vid].Col2;
 	output0.alpha = inputBuffer[input[0].vid].alpha*1.5;
 	output1.alpha = inputBuffer[input[0].vid].alpha*1.5;
 	
@@ -89,15 +89,15 @@ void geompolyline (point vs2gs input[1], inout TriangleStream<gsout> outStream){
 	
 	output0.pos = mul(float4(p1 + up1 * (wid/2), 1), tWVP);
 	output1.pos = mul(float4(p1 - up1 * (wid/2), 1), tWVP);
-	output0.col = inputBuffer[input[0].vid].p1Color;
-	output1.col = inputBuffer[input[0].vid].p1Color;
+	output0.col = inputBuffer[input[0].vid].Col1;
+	output1.col = inputBuffer[input[0].vid].Col1;
 	output0.alpha = alpha;
 	output1.alpha = alpha;
 	
 	output2.pos = mul(float4(p2 + up2 * (wid/2), 1), tWVP);
 	output3.pos = mul(float4(p2 - up2 * (wid/2), 1), tWVP);
-	output2.col = inputBuffer[input[0].vid].p2Color;
-	output3.col = inputBuffer[input[0].vid].p2Color;
+	output2.col = inputBuffer[input[0].vid].Col2;
+	output3.col = inputBuffer[input[0].vid].Col2;
 	output2.alpha = alpha;
 	output3.alpha = alpha;
 	
@@ -109,7 +109,7 @@ void geompolyline (point vs2gs input[1], inout TriangleStream<gsout> outStream){
 }
 
 float4 PS(gsout In): SV_Target{
-    float4 col = linecol * In.col * In.alpha;
+    float4 col = linecol *In.col *  In.alpha;
     return col;
 }
 
